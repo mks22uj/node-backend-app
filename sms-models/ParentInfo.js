@@ -1,0 +1,53 @@
+var mongoose=require('mongoose');
+mongoose.Promise=global.Promise;
+var parentInfo=mongoose.model('parent_main',{
+    userName:{
+        type:String,
+        minlength:1,
+        require:true,
+        unique:true
+    },passKey:{
+        type:String,
+        minlength:1,
+        require:true,
+        unique:true
+    },fatherName:{
+        type:String,
+        minlength:1,
+        require:true
+    },motherName:{
+        type:String,
+        minlength:1,
+        require:true
+    },guardianName:{
+        type:String,
+        minlength:1
+    },relationshipWithChild:{
+        type:String,
+        minlength:1
+    },emailId:{
+        type:String,
+        minlength:1,
+        require:true
+    },phoneNumber:{
+        type:String,
+        minlength:1,
+        require:true
+    },alternatePhoneNumber:{
+        type:String,
+        minlength:1
+    },adhar:{
+        type:String,
+        minlength:1
+    },currentAddress:{
+        type:String
+    },permanentAddress:{
+        type:String
+    },profileDpFile:{
+        type:String,
+        default:null
+    }
+});
+module.exports={
+    parentInfo:parentInfo
+}
