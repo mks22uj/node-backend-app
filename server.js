@@ -16,7 +16,7 @@ app.post('/addParent',(req,res)=>{
         }
         res.send(doc);
     }).catch((err)=>{
-        res.status(404).send();
+        res.status(404).send();  
     });
 });
 app.listen(3001);
