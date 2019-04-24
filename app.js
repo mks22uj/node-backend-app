@@ -7,5 +7,7 @@ app.use("/class-service", require('./sms-controllers/ClassController'));
 app.use("/leave-service", require('./sms-controllers/LeaveController'));
 app.use("/roles-service", require('./sms-controllers/RolesController'));
 app.use("/school-service", require('./sms-controllers/SchoolController'));
+app.use("/staff-service", require('./sms-controllers/StaffController'));
+app.use("/student-service", require('./sms-controllers/StudentController'));
 app.listen(3001);
 console.log("Listening at http://localhost:3001");

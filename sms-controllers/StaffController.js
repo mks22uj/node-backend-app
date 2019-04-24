@@ -6,13 +6,13 @@ var {
 } = require('mongodb');
 var {
     mongoose
-} = require('../qnabu-db/mongoose');
+} = require('../db/mongoose');
 var {
     StaffInfo
-} = require('../qnabu-models/SchoolStaffInfo');
-var app = express();
-app.use(bodyParser.json());
-app.post('/addStaff', (req, res) => {
+} = require('../sms-models/SchoolStaffInfo');
+var router = express.Router();
+router.use(bodyParser.json());
+router.post('/addStaff', (req, res) => {
     console.log(req.body);
     var staffData = new StaffInfo({
         staffFirstName: req.body.staffFirstName,
@@ -54,7 +54,7 @@ app.post('/addStaff', (req, res) => {
         res.status(404).send();
     });
 });
-app.get('/getAllStaff', (req, res) => {
+router.get('/getAllStaff', (req, res) => {
     console.log(req.body);
     StaffInfo.find().then((doc) => {
         if (!doc) {
@@ -65,7 +65,7 @@ app.get('/getAllStaff', (req, res) => {
         res.status(404).send();
     });
 });
-app.get('/getSigleStaff/:id', (req, res) => {
+router.get('/getSigleStaff/:id', (req, res) => {
     console.log(req.body);
     var id = req.params.id;
     if (ObjectId.isValid(id)) {
@@ -79,7 +79,7 @@ app.get('/getSigleStaff/:id', (req, res) => {
         });
     }
 });
-app.patch('/updateStaffInfo/:id', (req, res) => {
+router.patch('/updateStaffInfo/:id', (req, res) => {
     var id = req.params.id;
     if (ObjectId.isValid(id)) {
         var body = _.pick(req.body, ["email", "phoneNumber", "permanentAddress", "bloodGroup", "educationQualification"]);
@@ -102,7 +102,7 @@ app.patch('/updateStaffInfo/:id', (req, res) => {
         })
     }
 });
-app.delete('/deleteStaff/:id', (req, res) => {
+router.delete('/deleteStaff/:id', (req, res) => {
     var id = req.params.id;
     if (ObjectId.isValid(id)) {
         StaffInfo.findByIdAndRemove(id).then((doc) => {
@@ -115,7 +115,7 @@ app.delete('/deleteStaff/:id', (req, res) => {
         });
     }
 });
-app.delete('/deleteStaff', (req, res) => {
+router.delete('/deleteStaff', (req, res) => {
     StaffInfo.remove({}).then((doc) => {
         if (!doc) {
             return res.status(404).send();
@@ -125,6 +125,6 @@ app.delete('/deleteStaff', (req, res) => {
         res.status(404).send();
     });
 });
-
-app.listen(3001);
-console.log("listening at http://localhost:3000");
+module.exports = router;
+// app.listen(3001);
+// console.log("listening at http://localhost:3000");

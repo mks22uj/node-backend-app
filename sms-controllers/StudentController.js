@@ -1,20 +1,20 @@
 var {
     mongoose
-} = require('../qnabu-db/mongoose');
+} = require('../db/mongoose');
 var {
     ObjectID
 } = require('mongodb');
 var {
     StudentInfo
-} = require('../qnabu-models/StudentInfo');
+} = require('../sms-models/StudentInfo');
 var express = require('express');
 var bodyParser = require('body-parser');
 
 var formidable = require('express-formidable');
-var app = express();
-app.use(formidable());
+var router = express.Router();
+router.use(formidable());
 //app.use(bodyParser.json());
-app.post('/addStudent', (req, res) => {
+router.post('/addStudent', (req, res) => {
     console.log(req.fields);
     var studentData = new StudentInfo(req.fields);
     // var studentData = new StudentInfo({
@@ -50,7 +50,7 @@ app.post('/addStudent', (req, res) => {
         res.end();
     });
 });
-app.get('/getStudents', (req, res) => {
+router.get('/getStudents', (req, res) => {
     console.log(req.fields);
     StudentInfo.find().then((doc) => {
         if (!doc) {
@@ -62,7 +62,7 @@ app.get('/getStudents', (req, res) => {
         res.send(JSON.stringify(err, undefined, 2));
     });
 });
-app.get('/getStudents/:id', (req, res) => {
+router.get('/getStudents/:id', (req, res) => {
     console.log(req.fields);
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
@@ -77,8 +77,8 @@ app.get('/getStudents/:id', (req, res) => {
         res.status(404).send();
     });
 });
-app.use(formidable());
-app.put('/update', (req, res) => {
+router.use(formidable());
+router.put('/update', (req, res) => {
     var studentData = new StudentInfo(req.fields);
     var id = req.fields._id;
     if (!ObjectID.isValid(id)) {
@@ -98,7 +98,7 @@ app.put('/update', (req, res) => {
     });
 
 });
-app.delete('/deleteStudent/:id', (req, res) => {
+router.delete('/deleteStudent/:id', (req, res) => {
     console.log(req.body);
     StudentInfo.findByIdAndRemove(req.params.id).then((doc) => {
         if (!doc) {
@@ -109,7 +109,7 @@ app.delete('/deleteStudent/:id', (req, res) => {
         res.status(404).send();
     });
 });
-app.delete('/deleteAllStudents', (req, res) => {
+router.delete('/deleteAllStudents', (req, res) => {
     StudentInfo.remove({}).then((doc) => {
         if (!doc) {
             return res.status(404).send();
@@ -119,5 +119,6 @@ app.delete('/deleteAllStudents', (req, res) => {
         res.status(404).send();
     });
 });
-app.listen(3001);
-console.log("Listening at http://localhost:3001/");
+module.exports = router;
+// app.listen(3001);
+// console.log("Listening at http://localhost:3001/");
