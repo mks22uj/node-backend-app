@@ -10,5 +10,7 @@ app.use("/school-service", require('./sms-controllers/SchoolController'));
 app.use("/staff-service", require('./sms-controllers/StaffController'));
 app.use("/student-service", require('./sms-controllers/StudentController'));
 app.use("/activity-service", require('./sms-controllers/AnnualActivityController'));
+app.use("/holiday-service", require('./sms-controllers/AcademicHolidayController'));
+app.use("/board-class-service", require('./sms-controllers/BoardClassController'));
 app.listen(3001);
 console.log("Listening at http://localhost:3001");
