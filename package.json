@@ -22,6 +22,8 @@
     "express-formidable": "^1.2.0",
     "mongodb": "^3.2.3",
     "mongoose": "^5.5.3",
+    "mysql": "^2.17.1",
+    "node-mysql": "^0.4.2",
     "validator": "^10.11.0"
   }
 }
