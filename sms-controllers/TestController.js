@@ -1,32 +1,27 @@
-var {
-    mongoose
-} = require('../db/mongoose');
-var {
-    parentInfo
-} = require('../sms-models/ParentInfo');
+var mongoose = require('../db/mongoose');
+var express = require('express');
+var formidable = require('express-formidable');
 var {
     ObjectID
 } = require('mongodb');
-var express = require('express');
-const formidable = require('express-formidable');
-var bodyParser = require('body-parser');
+var {
+    TestInfo
+} = require('../sms-models/TestInfo');
 var router = express.Router();
 router.use(formidable());
-router.post('/addParent', (req, res) => {
+router.post('/addTestInfo', (req, res) => {
     console.log(req.fields);
-    var parentdate = new parentInfo(req.fields);
-    parentdate.save().then((doc) => {
-        if (!doc) {
-            return res.status(404).send();
-        }
+    var testData = new TestInfo(req.fields);
+    testData.save().then((doc) => {
         res.send(doc);
     }).catch((err) => {
         res.status(404).send();
     });
+
 });
-router.get('/getParentList', (req, res) => {
+router.get('/getTestInfo', (req, res) => {
     console.log(req.body);
-    parentInfo.find({}).then((doc) => {
+    TestInfo.find().then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }
@@ -35,12 +30,13 @@ router.get('/getParentList', (req, res) => {
         res.status(404).send();
     });
 });
-router.get('/getParentinfo/:id', (req, res) => {
+router.get('/getTestInfo/:id', (req, res) => {
+    console.log(req.body);
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
         return res.status(404).send();
     }
-    parentInfo.findById(id).then((doc) => {
+    TestInfo.findById(id).then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }
@@ -50,12 +46,12 @@ router.get('/getParentinfo/:id', (req, res) => {
     });
 });
 router.use(formidable());
-router.put('/updateParentInfo', (req, res) => {
+router.put('/updateTestInfo', (req, res) => {
     console.log(req.fields);
-    var parentData = new parentInfo(req.fields);
-    parentInfo.update({
+    var testData = new TestInfo(req.fields);
+    TestInfo.update({
         _id: req.fields._id
-    }, parentData).then((doc) => {
+    }, testData).then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }
@@ -64,13 +60,12 @@ router.put('/updateParentInfo', (req, res) => {
         res.status(404).send();
     });
 });
-router.delete('/deleteParentInfo/:id', (req, res) => {
-    console.log(req.body);
+router.delete('/deleteTestInfo/:id', (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
         return res.status(404).send();
     }
-    parentInfo.findByIdAndRemove(id).then((doc) => {
+    TestInfo.findByIdAndRemove(id).then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }

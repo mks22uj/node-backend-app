@@ -1,21 +1,25 @@
-var {
-    mongoose
-} = require('../db/mongoose');
-var {
-    parentInfo
-} = require('../sms-models/ParentInfo');
+var mongoose = require('mongoose');
 var {
     ObjectID
 } = require('mongodb');
+var {
+    TopicInfo
+} = require('../sms-models/TopicInfo');
 var express = require('express');
-const formidable = require('express-formidable');
-var bodyParser = require('body-parser');
+var formidable = require('express-formidable');
 var router = express.Router();
 router.use(formidable());
-router.post('/addParent', (req, res) => {
+router.post('/addTopic', (req, res) => {
     console.log(req.fields);
-    var parentdate = new parentInfo(req.fields);
-    parentdate.save().then((doc) => {
+    var topicData = new TopicInfo(req.fields);
+    topicData.save().then((doc) => {
+        res.send(doc);
+    }).catch((err) => {
+        res.status(404).send();
+    });
+});
+router.get('/getTopicList', (req, res) => {
+    TopicInfo.find().then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }
@@ -24,38 +28,12 @@ router.post('/addParent', (req, res) => {
         res.status(404).send();
     });
 });
-router.get('/getParentList', (req, res) => {
-    console.log(req.body);
-    parentInfo.find({}).then((doc) => {
-        if (!doc) {
-            return res.status(404).send();
-        }
-        res.send(doc);
-    }).catch((err) => {
-        res.status(404).send();
-    });
-});
-router.get('/getParentinfo/:id', (req, res) => {
-    var id = req.params.id;
-    if (!ObjectID.isValid(id)) {
-        return res.status(404).send();
-    }
-    parentInfo.findById(id).then((doc) => {
-        if (!doc) {
-            return res.status(404).send();
-        }
-        res.send(doc);
-    }).catch((err) => {
-        res.status(404).send();
-    });
-});
-router.use(formidable());
-router.put('/updateParentInfo', (req, res) => {
+router.put('/updateTopicInfo', (req, res) => {
     console.log(req.fields);
-    var parentData = new parentInfo(req.fields);
-    parentInfo.update({
+    var updateData = new TopicInfo(req.fields);
+    TopicInfo.update({
         _id: req.fields._id
-    }, parentData).then((doc) => {
+    }, updateData).then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }
@@ -64,13 +42,13 @@ router.put('/updateParentInfo', (req, res) => {
         res.status(404).send();
     });
 });
-router.delete('/deleteParentInfo/:id', (req, res) => {
+router.get('/getTopicInfo/:id', (req, res) => {
     console.log(req.body);
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
         return res.status(404).send();
     }
-    parentInfo.findByIdAndRemove(id).then((doc) => {
+    TopicInfo.findById(id).then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }
@@ -79,4 +57,21 @@ router.delete('/deleteParentInfo/:id', (req, res) => {
         res.status(404).send();
     });
 });
+router.delete('/deleteTopicInfo/:id', (req, res) => {
+    console.log(req.body);
+    var id = req.params.id;
+    if (!ObjectID.isValid(id)) {
+        return res.status(404).send();
+    }
+    TopicInfo.findByIdAndRemove(id).then((doc) => {
+        if (!doc) {
+            return res.status(404).send();
+        }
+        res.send(doc);
+    }).catch((err) => {
+        res.status(404).send();
+    });
+});
+
+
 module.exports = router;

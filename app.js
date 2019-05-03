@@ -1,7 +1,7 @@
 var mongoose = require('./db/mongoose');
 var express = require('express');
 var app = express();
-app.use('/login-server', require('./sms-controllers/ParentController'));
+app.use('/parent-service', require('./sms-controllers/ParentController'));
 app.use("/assign-task-service", require('./sms-controllers/AssignTaskController'));
 app.use("/class-service", require('./sms-controllers/ClassController'));
 app.use("/leave-service", require('./sms-controllers/LeaveController'));
@@ -12,5 +12,8 @@ app.use("/student-service", require('./sms-controllers/StudentController'));
 app.use("/activity-service", require('./sms-controllers/AnnualActivityController'));
 app.use("/holiday-service", require('./sms-controllers/AcademicHolidayController'));
 app.use("/board-class-service", require('./sms-controllers/BoardClassController'));
+app.use("/test-service", require('./sms-controllers/TestController'));
+app.use("/topic-service", require('./sms-controllers/TopicController'));
+app.use("/notice-service", require('./sms-controllers/NoticeController'));
 app.listen(3001);
 console.log("Listening at http://localhost:3001");
