@@ -15,5 +15,6 @@ app.use("/board-class-service", require('./sms-controllers/BoardClassController'
 app.use("/test-service", require('./sms-controllers/TestController'));
 app.use("/topic-service", require('./sms-controllers/TopicController'));
 app.use("/notice-service", require('./sms-controllers/NoticeController'));
+app.use("/issue-service", require('./sms-controllers/SchoolIssueController'));
 app.listen(3001);
 console.log("Listening at http://localhost:3001");
