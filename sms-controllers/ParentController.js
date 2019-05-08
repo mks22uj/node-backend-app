@@ -14,12 +14,19 @@ var router = express.Router();
 router.use(formidable());
 router.post('/addParent', (req, res) => {
     console.log(req.fields);
-    var parentdate = new parentInfo(req.fields);
-    parentdate.save().then((doc) => {
+    var parentdata = new parentInfo(req.fields);
+    /*parentdate.save().then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }
         res.send(doc);
+    }).catch((err) => {
+        res.status(404).send();
+    });*/
+    parentdata.save().then((parentdata) => {
+        return parentdata.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(parentdata);
     }).catch((err) => {
         res.status(404).send();
     });
@@ -31,6 +38,17 @@ router.get('/getParentList', (req, res) => {
             return res.status(404).send();
         }
         res.send(doc);
+    }).catch((err) => {
+        res.status(404).send();
+    });
+});
+router.get('/getInfoByToken', (req, res) => {
+    var token = req.header('x-auth');
+    parentInfo.findByToken(token).then((user) => {
+        if (!user) {
+            return Promise.reject();
+        }
+        res.send(user);
     }).catch((err) => {
         res.status(404).send();
     });
