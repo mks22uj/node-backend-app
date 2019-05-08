@@ -3,11 +3,11 @@ mongoose.Promise = global.Promise;
 var userSchema = mongoose.Schema({
     board_id: {
         type: Number,
-        require: treu
+        require: true
     },
     createTime: {
         type: Date,
-        default: new Date().getMilliseconds()
+        default: Date.now
     },
     subjectName: {
         type: String,
