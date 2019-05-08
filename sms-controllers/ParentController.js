@@ -14,12 +14,42 @@ var router = express.Router();
 router.use(formidable());
 router.post('/addParent', (req, res) => {
     console.log(req.fields);
-    var parentdate = new parentInfo(req.fields);
-    parentdate.save().then((doc) => {
-        if (!doc) {
+    var parentdata = new parentInfo(req.fields);
+
+    //postData without Token Section Starts
+    // parentdata.save().then((user) => {
+    //     if (!user) {
+    //         return res.status(404).send();
+    //     }
+    //     res.send(user);
+    // }).catch((err) => {
+    //     res.status(404).send();
+    // });
+    //postData without Token Section Ends
+    parentdata.save().then((parentdata) => {
+        return parentdata.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(parentdata);
+    }).catch((err) => {
+        res.status(404).send();
+    })
+
+    /*
+    parentdata.save().then((parentdata) => {
+        return parentdata.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(parentdata);
+    }).catch((err) => {
+        res.status(404).send();
+    });*/
+});
+router.get('/getInfoByTokenByauth', (req, res) => {
+    var token = req.header('x-auth');
+    parentInfo.findByToken(token).then((user) => {
+        if (!user) {
             return res.status(404).send();
         }
-        res.send(doc);
+        res.send(user);
     }).catch((err) => {
         res.status(404).send();
     });

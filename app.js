@@ -1,5 +1,59 @@
 var mongoose = require('./db/mongoose');
 var express = require('express');
+
+const {
+    SHA256
+} = require('crypto-js');
+/*
+var message = "HI I am Ashok";
+
+var data = {
+    id: 4
+};
+var token = {
+    data: data,
+    hash: SHA256(JSON.stringify(data) + "Somethin New").toString()
+}
+token.data.data = 5;
+token.hash = SHA256(JSON.stringify(data)).toString();
+var resultHash = SHA256(JSON.stringify(token.data) + "Somethin New");
+if (resultHash == token.hash) {
+    console.log("Data Was Not Changed");
+} else {
+    console.log("Data was Changed");
+}
+*/
+
+//Token System Satrts 
+/*
+const jwt = require('jsonwebtoken');
+var data = {
+    id: 10
+};
+var encode_Data = jwt.sign(data, 'abc123');
+var decode_Data = jwt.verify(encode_Data, 'abc123').toString();
+console.log("Encode Data =" + encode_Data);
+console.log("Decode_Data =" + decode_Data);
+*/
+
+//Token System Satrts 
+
+
+//Encryption Section Starts 
+var bcrypt = require('bcryptjs');
+var password = "ashokjhf";
+bcrypt.genSalt(10, function (err, salt) {
+    bcrypt.hash(password, salt, (err, hash) => {
+        console.log("hashValue ==" + hash);
+
+    });
+});
+var hashedValue = "$2a$10$QgYuBG3WcRqz/IeoTjynJOF7eKlEulN71b9n/9UdyWjlrudZ4gMsS";
+bcrypt.compare(password, hashedValue, (err, res) => {
+    console.log("Response Code =" + res);
+});
+//Encryption Section Ends
+
 var app = express();
 app.use('/parent-service', require('./sms-controllers/ParentController'));
 app.use("/assign-task-service", require('./sms-controllers/AssignTaskController'));
