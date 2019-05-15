@@ -50,3 +50,4 @@ app.use("/issue-service", require('./sms-controllers/SchoolIssueController'));
 app.use("/class-subject-map-service", require('./sms-controllers/ClassSubjectMappingController'));
 app.listen(3001);
 console.log("Listening at http://localhost:3001");
+console.log("welcome");
