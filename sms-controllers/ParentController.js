@@ -15,6 +15,7 @@ router.use(formidable());
 router.post('/addParent', (req, res) => {
     console.log(req.fields);
     var parentdata = new parentInfo(req.fields);
+<<<<<<< HEAD
 
     //postData without Token Section Starts
     // parentdata.save().then((user) => {
@@ -47,9 +48,20 @@ router.get('/getInfoByTokenByauth', (req, res) => {
     var token = req.header('x-auth');
     parentInfo.findByToken(token).then((user) => {
         if (!user) {
+=======
+    /*parentdate.save().then((doc) => {
+        if (!doc) {
+>>>>>>> 07256d3f5c4e8d17a8cf3281063f2bae7828c9dd
             return res.status(404).send();
         }
         res.send(user);
+    }).catch((err) => {
+        res.status(404).send();
+    });*/
+    parentdata.save().then((parentdata) => {
+        return parentdata.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(parentdata);
     }).catch((err) => {
         res.status(404).send();
     });
@@ -61,6 +73,17 @@ router.get('/getParentList', (req, res) => {
             return res.status(404).send();
         }
         res.send(doc);
+    }).catch((err) => {
+        res.status(404).send();
+    });
+});
+router.get('/getInfoByToken', (req, res) => {
+    var token = req.header('x-auth');
+    parentInfo.findByToken(token).then((user) => {
+        if (!user) {
+            return Promise.reject();
+        }
+        res.send(user);
     }).catch((err) => {
         res.status(404).send();
     });

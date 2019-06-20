@@ -82,6 +82,20 @@ router.get('/getSigleStaff/:id', (req, res) => {
         });
     }
 });
+router.get('/getSchoolStaffList/:school_id', (req, res) => {
+    var school_id = req.params.school_id;
+    StaffInfo.find({
+        "schoolId": school_id
+    }).then((doc) => {
+        if (!doc) {
+            return res.status(404).send();
+        }
+        res.send(doc);
+    }).catch((err) => {
+        return res.status(404).send();
+    });
+});
+
 router.patch('/updateStaffInfo/:id', (req, res) => {
     var id = req.params.id;
     if (ObjectId.isValid(id)) {
