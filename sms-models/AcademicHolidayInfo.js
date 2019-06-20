@@ -1,5 +1,7 @@
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
+var start_date = new Date();
+var strt_date = start_date.getFullYear() + "-" + (start_date.getMonth() + 1) + "-" + start_date.getDate();
 var HolidayInfo = mongoose.model("academic_holiday", {
 
     createdBy: {
@@ -8,7 +10,7 @@ var HolidayInfo = mongoose.model("academic_holiday", {
     },
     createTime: {
         type: Date,
-        default: Date.now()
+        default: new Date().getMilliseconds()
     },
     holidayDescription: {
         type: String,
@@ -18,7 +20,7 @@ var HolidayInfo = mongoose.model("academic_holiday", {
     },
     startDate: {
         type: Date,
-        default: Date.now()
+        default: strt_date
     },
     endDate: {
         type: Date,

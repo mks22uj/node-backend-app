@@ -85,7 +85,7 @@ var StaffInfo = mongoose.model('staff_Main', {
     },
     gendar: {
         type: String,
-        default: new Date().getDate()
+        default: "Male"
     },
     bloodGroup: {
         type: String,

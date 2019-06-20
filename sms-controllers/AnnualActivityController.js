@@ -71,6 +71,4 @@ router.delete('/deleteActivity/:id', (req, res) => {
         res.status(404).send();
     });
 });
-
-
 module.exports = router;

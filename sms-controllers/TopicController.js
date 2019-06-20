@@ -72,6 +72,4 @@ router.delete('/deleteTopicInfo/:id', (req, res) => {
         res.status(404).send();
     });
 });
-
-
 module.exports = router;

@@ -42,13 +42,24 @@ router.get('/get_academic_holiday/:id', (req, res) => {
         res.status(404).send();
     });
 });
+router.use(formidable());
 router.put('/update_academic_holiday', (req, res) => {
     var holidayInfo = new HolidayInfo(req.fields);
-    HolidayInfo.updateOne({
+    /*HolidayInfo.updateOne({
         "_id": req.fields._id
     }, holidayInfo, {
         new: true
     }).then((doc) => {
+        if (!doc) {
+            return res.status(404).send();
+        }
+        res.send(doc);
+    }).catch((err) => {
+        res.status(404).send();
+    });*/
+    HolidayInfo.update({
+        _id: req.fields_id
+    }, holidayInfo).then((doc) => {
         if (!doc) {
             return res.status(404).send();
         }

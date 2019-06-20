@@ -21,7 +21,7 @@ router.post('/addRoles', (req, res) => {
     })
 });
 router.get('/getRoles', (req, res) => {
-    console.log(req.body);
+    console.log(req.fields);
     RoleInfo.find({}).then((doc) => {
         if (!doc) {
             return res.status(404).send();

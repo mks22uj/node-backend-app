@@ -28,6 +28,14 @@ var LeaveInfo = mongoose.model('staff_leave', {
     leaveDayType: {
         type: String,
         require: true
+    },
+    leaveStatus: {
+        type: String,
+        default: "open"
+    },
+    leave_status_message: {
+        type: String,
+        default: null
     }
 });
 module.exports = {

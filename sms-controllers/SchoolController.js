@@ -10,27 +10,29 @@ var {
 var {
     mongoose
 } = require('../db/mongoose');
+var formidable = require('express-formidable');
 var router = express.Router();
-router.use(bodyParser.json());
+//router.use(bodyParser.json()); it is used to post data using json format
+router.use(formidable());
 router.post('/addSchool', (req, res) => {
-    console.log(req.body);
-
-    var schoolData = new SchoolInfo({
-        schoolName: req.body.schoolName,
-        schoolAddress: req.body.schoolAddress,
-        schoolStateId: req.body.schoolStateId,
-        schoolCityId: req.body.schoolCityId,
-        ownerName: req.body.ownerName,
-        regNum: req.body.regNum,
-        bannerFile: req.body.bannerFile,
-        establishmentYear: req.body.establishmentYear,
-        schoolBoardId: req.body.schoolBoardId,
-        schoolMediumId: req.body.schoolMediumId,
-        logoFile: req.body.logoFile,
-        classLower: req.body.classLower,
-        classUpper: req.body.classUpper,
-        maxNumStudents: req.body.maxNumStudents
-    });
+    console.log(req.fields);
+    var schoolData = new SchoolInfo(req.fields);
+    // var schoolData = new SchoolInfo({
+    //     schoolName: req.body.schoolName,
+    //     schoolAddress: req.body.schoolAddress,
+    //     schoolStateId: req.body.schoolStateId,
+    //     schoolCityId: req.body.schoolCityId,
+    //     ownerName: req.body.ownerName,
+    //     regNum: req.body.regNum,
+    //     bannerFile: req.body.bannerFile,
+    //     establishmentYear: req.body.establishmentYear,
+    //     schoolBoardId: req.body.schoolBoardId,
+    //     schoolMediumId: req.body.schoolMediumId,
+    //     logoFile: req.body.logoFile,
+    //     classLower: req.body.classLower,
+    //     classUpper: req.body.classUpper,
+    //     maxNumStudents: req.body.maxNumStudents
+    // });
     schoolData.save().then((doc) => {
         res.send(doc);
     }).catch((err) => {
@@ -45,7 +47,7 @@ router.get('/getSchools', (req, res) => {
         res.send(e);
     });
 });
-router.get('/getSingleSchoolInfo/:id', (req, res) => {
+router.get('/getSchoolInfo/:id', (req, res) => {
     var id = req.params.id;
     if (ObjectID.isValid(id)) {
         SchoolInfo.findById(id).then((doc) => {
@@ -59,7 +61,7 @@ router.get('/getSingleSchoolInfo/:id', (req, res) => {
     }
 
 });
-router.patch('/updateSingleSchool/:id', (req, res) => {
+router.patch('/updateSchoolInfo/:id', (req, res) => {
     var id = req.params.id;
     if (ObjectID.isValid(id)) {
         var body = _.pick(req.body, ["regNum", "establishmentYear"]);
@@ -79,11 +81,12 @@ router.patch('/updateSingleSchool/:id', (req, res) => {
         })
     }
 });
-router.use(bodyParser.json());
+//router.use(bodyParser.json()); it is used to update data as json format
+router.use(formidable());
 router.patch('/updateSchool', (req, res) => {
-    var schoolData = new SchoolInfo(req.body);
-    SchoolInfo.updateOne({
-        '_id': req.body._id
+    var schoolData = new SchoolInfo(req.fields);
+    SchoolInfo.update({
+        '_id': req.fields._id
     }, schoolData, {
         new: true
     }).then((doc) => {

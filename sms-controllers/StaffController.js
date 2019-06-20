@@ -1,6 +1,7 @@
 var express = require('express');
 var _ = require('lodash');
 var bodyParser = require('body-parser');
+var formidable = require('express-formidable');
 var {
     ObjectId
 } = require('mongodb');
@@ -11,43 +12,45 @@ var {
     StaffInfo
 } = require('../sms-models/SchoolStaffInfo');
 var router = express.Router();
-router.use(bodyParser.json());
+//router.use(bodyParser.json());
+router.use(formidable());
 router.post('/addStaff', (req, res) => {
-    console.log(req.body);
-    var staffData = new StaffInfo({
-        staffFirstName: req.body.staffFirstName,
-        staffLastName: req.body.staffLastName,
-        roleId: req.body.roleId,
-        roleTitle: req.body.roleTitle,
-        employeeId: req.body.employeeId,
-        schoolId: req.body.schoolId,
-        joiningDate: req.body.joiningDate,
-        previousOrganization: req.body.previousOrganization,
-        presentAddress: req.body.presentAddress,
-        userName: req.body.userName,
-        passKey: req.body.passKey,
-        createdBy: req.body.createdBy,
-        currentlyAssociated: req.body.currentlyAssociated,
-        createTime: req.body.createTime,
-        profilePhoto: req.body.profilePhoto,
-        session: req.body.session,
-        email: req.body.email,
-        phoneNumber: req.body.phoneNumber,
-        permanentAddress: req.body.permanentAddress,
-        dob: req.body.dob,
-        gendar: req.body.gendar,
-        bloodGroup: req.body.bloodGroup,
-        educationQualification: req.body.educationQualification,
-        nationality: req.body.nationality,
-        birthPlace: req.body.birthPlace,
-        motherTounge: req.body.motherTounge,
-        fatherName: req.body.fatherName,
-        motherName: req.body.motherName,
-        religion: req.body.religion,
-        cast: req.body.cast,
-        adhar: req.body.cast,
-        classSectionInfo: req.body.classSectionInfo
-    });
+    console.log(req.fields);
+    var staffData = new StaffInfo(req.fields);
+    // var staffData = new StaffInfo({
+    //     staffFirstName: req.body.staffFirstName,
+    //     staffLastName: req.body.staffLastName,
+    //     roleId: req.body.roleId,
+    //     roleTitle: req.body.roleTitle,
+    //     employeeId: req.body.employeeId,
+    //     schoolId: req.body.schoolId,
+    //     joiningDate: req.body.joiningDate,
+    //     previousOrganization: req.body.previousOrganization,
+    //     presentAddress: req.body.presentAddress,
+    //     userName: req.body.userName,
+    //     passKey: req.body.passKey,
+    //     createdBy: req.body.createdBy,
+    //     currentlyAssociated: req.body.currentlyAssociated,
+    //     createTime: req.body.createTime,
+    //     profilePhoto: req.body.profilePhoto,
+    //     session: req.body.session,
+    //     email: req.body.email,
+    //     phoneNumber: req.body.phoneNumber,
+    //     permanentAddress: req.body.permanentAddress,
+    //     dob: req.body.dob,
+    //     gendar: req.body.gendar,
+    //     bloodGroup: req.body.bloodGroup,
+    //     educationQualification: req.body.educationQualification,
+    //     nationality: req.body.nationality,
+    //     birthPlace: req.body.birthPlace,
+    //     motherTounge: req.body.motherTounge,
+    //     fatherName: req.body.fatherName,
+    //     motherName: req.body.motherName,
+    //     religion: req.body.religion,
+    //     cast: req.body.cast,
+    //     adhar: req.body.cast,
+    //     classSectionInfo: req.body.classSectionInfo
+    // });
     staffData.save().then((doc) => {
         res.send(doc);
     }).catch((err) => {
@@ -55,7 +58,7 @@ router.post('/addStaff', (req, res) => {
     });
 });
 router.get('/getAllStaff', (req, res) => {
-    console.log(req.body);
+    console.log(req.fields);
     StaffInfo.find().then((doc) => {
         if (!doc) {
             return res.status(404).send();
@@ -66,7 +69,7 @@ router.get('/getAllStaff', (req, res) => {
     });
 });
 router.get('/getSigleStaff/:id', (req, res) => {
-    console.log(req.body);
+    console.log(req.fields);
     var id = req.params.id;
     if (ObjectId.isValid(id)) {
         StaffInfo.findById(id).then((doc) => {

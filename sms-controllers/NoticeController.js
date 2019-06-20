@@ -18,6 +18,7 @@ router.post('/postNoticeInfo', (req, res) => {
     });
 });
 router.get('/getNoticeInfo', (req, res) => {
+    console.log(req.fields);
     NoticeInfo.find().then((doc) => {
         if (!doc) {
             return res.status(404).send();
@@ -25,6 +26,20 @@ router.get('/getNoticeInfo', (req, res) => {
         res.send(doc);
     }).catch((err) => {
         res.status(404).send();
+    });
+});
+router.get('/getNoticeInfo/:id', (req, res) => {
+    var id = req.params.id;
+    if (!ObjectID.isValid(id)) {
+        return res.status(403).send();
+    }
+    NoticeInfo.findById(id).then((doc) => {
+        if (!doc) {
+            return res.status(405).send();
+        }
+        res.send(doc);
+    }).catch((err) => {
+        res.status(402).send();
     });
 });
 router.put('/updateNoticeInfo', (req, res) => {
@@ -54,5 +69,16 @@ router.delete('/deleteNoticeInfo/:id', (req, res) => {
     }).catch((err) => {
         res.status(404).send();
     })
+});
+router.delete('/deleteAllNoticeInfo', (req, res) => {
+    console.log(req.fields);
+    NoticeInfo.remove({}).then((doc) => {
+        if (!doc) {
+            return res.status(405).send();
+        }
+        res.send(doc);
+    }).catch((err) => {
+        res.send("Unabale To delete Notice");
+    });
 });
 module.exports = router;
