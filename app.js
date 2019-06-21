@@ -1,73 +1,9 @@
-/*const { SHA256 } = require('crypto-js');
-var message = 'HI I am Ashok';
-var hashMessage = SHA256(message).toString();
-console.log("Original String =" + message);
-console.log("HashMessage =" + hashMessage);
-var data = {
-    id: 4
-}
-var token = {
-    data: data,
-    hash: SHA256(JSON.stringify(data) + 'Something New').toString()
-}
-
-data.id = 5;
-var hashValues = SHA256(JSON.stringify(token.data) + 'Something New').toString();
-token.hash = SHA256(JSON.stringify(token.data)).toString();
-if (hashValues == token.hash) {
-    console.log("Data Was Not Changed");
-} else {
-    console.log("Data Was Changed");
-}*/
-
-/*
-const jwt = require('jsonwebtoken');
-var message = "HI I am  Ashok";
-var encode_value = jwt.sign(message, 'abc123');
-console.log("Encode URL =" + encode_value);
-var decode_url = jwt.verify(encode_value, 'abc123');
-console.log("Decode URL =" + decode_url);*/
-
 var mongoose = require('./db/mongoose');
 var express = require('express');
 
 const {
     SHA256
 } = require('crypto-js');
-/*
-var message = "HI I am Ashok";
-
-var data = {
-    id: 4
-};
-var token = {
-    data: data,
-    hash: SHA256(JSON.stringify(data) + "Somethin New").toString()
-}
-token.data.data = 5;
-token.hash = SHA256(JSON.stringify(data)).toString();
-var resultHash = SHA256(JSON.stringify(token.data) + "Somethin New");
-if (resultHash == token.hash) {
-    console.log("Data Was Not Changed");
-} else {
-    console.log("Data was Changed");
-}
-*/
-
-//Token System Satrts 
-/*
-const jwt = require('jsonwebtoken');
-var data = {
-    id: 10
-};
-var encode_Data = jwt.sign(data, 'abc123');
-var decode_Data = jwt.verify(encode_Data, 'abc123').toString();
-console.log("Encode Data =" + encode_Data);
-console.log("Decode_Data =" + decode_Data);
-*/
-
-//Token System Satrts 
-
 
 //Encryption Section Starts 
 var bcrypt = require('bcryptjs');
@@ -86,7 +22,7 @@ bcrypt.compare(password, hashedValue, (err, res) => {
 
 var app = express();
 app.use('/board-subject', require('./sms-controllers/BoardSubjectController'));
-app.use('/parent-service', require('./sms-controllers/ParentController'));
+//app.use('/parent-service', require('./sms-controllers/ParentController'));
 app.use("/assign-task-service", require('./sms-controllers/AssignTaskController'));
 app.use("/class-service", require('./sms-controllers/ClassController'));
 app.use("/leave-service", require('./sms-controllers/LeaveController'));

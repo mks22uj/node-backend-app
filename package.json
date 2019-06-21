@@ -1,12 +1,23 @@
 {
-<<<<<<< HEAD
   "name": "backend-app",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "crypto-js": "^3.1.9-1",
+    "express": "^4.17.1",
+    "express-formidable": "^1.2.0",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.11",
+    "mongodb": "^3.2.7",
+    "mongoose": "^5.6.0",
+    "mysql": "^2.17.1",
+    "node-mysql": "^0.4.2"
+  },
+  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -17,50 +28,5 @@
   "bugs": {
     "url": "https://github.com/mks22uj/node-backend-app/issues"
   },
-  "homepage": "https://github.com/mks22uj/node-backend-app#readme",
-  "dependencies": {
-    "bcryptjs": "^2.4.3",
-    "crypto-js": "^3.1.9-1",
-    "express": "^4.16.4",
-    "express-formidable": "^1.2.0",
-    "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.11",
-    "mongodb": "^3.2.3",
-    "mongoose": "^5.5.3",
-    "mysql": "^2.17.1",
-    "node-mysql": "^0.4.2",
-    "validator": "^10.11.0"
-  }
-=======
-    "name": "backend-app",
-    "version": "1.0.0",
-    "description": "",
-    "main": "app.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node app.js"
-    },
-    "repository": {
-        "type": "git",
-        "url": "git+https://github.com/mks22uj/node-backend-app.git"
-    },
-    "author": "",
-    "license": "ISC",
-    "bugs": {
-        "url": "https://github.com/mks22uj/node-backend-app/issues"
-    },
-    "homepage": "https://github.com/mks22uj/node-backend-app#readme",
-    "dependencies": {
-        "crypto-js": "^3.1.9-1",
-        "express": "^4.16.4",
-        "express-formidable": "^1.2.0",
-        "jsonwebtoken": "^8.5.1",
-        "mongodb": "^3.2.3",
-        "mongoose": "^5.5.3",
-        "mysql": "^2.17.1",
-        "node-mysql": "^0.4.2",
-        "nodemon": "^1.19.0",
-        "validator": "^10.11.0"
-    }
->>>>>>> 07256d3f5c4e8d17a8cf3281063f2bae7828c9dd
+  "homepage": "https://github.com/mks22uj/node-backend-app#readme"
 }
