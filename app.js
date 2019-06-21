@@ -6,6 +6,7 @@ const {
 } = require('crypto-js');
 
 //Encryption Section Starts 
+/*
 var bcrypt = require('bcryptjs');
 var password = "ashokjhf";
 bcrypt.genSalt(10, function (err, salt) {
@@ -17,12 +18,12 @@ bcrypt.genSalt(10, function (err, salt) {
 var hashedValue = "$2a$10$QgYuBG3WcRqz/IeoTjynJOF7eKlEulN71b9n/9UdyWjlrudZ4gMsS";
 bcrypt.compare(password, hashedValue, (err, res) => {
     console.log("Response Code =" + res);
-});
+});*/
 //Encryption Section Ends
 
 var app = express();
 app.use('/board-subject', require('./sms-controllers/BoardSubjectController'));
-//app.use('/parent-service', require('./sms-controllers/ParentController'));
+app.use('/parent-service', require('./sms-controllers/ParentController'));
 app.use("/assign-task-service", require('./sms-controllers/AssignTaskController'));
 app.use("/class-service", require('./sms-controllers/ClassController'));
 app.use("/leave-service", require('./sms-controllers/LeaveController'));
