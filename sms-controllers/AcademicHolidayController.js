@@ -18,6 +18,7 @@ router.post('/add_academic_holiday', (req, res) => {
         res.status(404).send();
     });
 });
+//Get All Academic Holiday Section Starts
 router.get('/get_academic_holiday', (req, res) => {
     HolidayInfo.find().then((doc) => {
         if (!doc) {
@@ -28,6 +29,9 @@ router.get('/get_academic_holiday', (req, res) => {
         res.status(404).send();
     });
 });
+//Get All Academic Holiday Section End
+
+//Get Academic Holiday Information With respect to id
 router.get('/get_academic_holiday/:id', (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
@@ -42,6 +46,8 @@ router.get('/get_academic_holiday/:id', (req, res) => {
         res.status(404).send();
     });
 });
+
+//Update Academic Holiday Information
 router.use(formidable());
 router.put('/update_academic_holiday', (req, res) => {
     var holidayInfo = new HolidayInfo(req.fields);
@@ -68,6 +74,7 @@ router.put('/update_academic_holiday', (req, res) => {
         res.status(404).send();
     });
 });
+//Delete Academic Holiday Information with respect to id
 router.delete('/delete_academic_holiday/:id', (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {

@@ -79,20 +79,7 @@ var UserSchema = mongoose.Schema({
         }
     }]
 });
-UserSchema.statics.findByToken = function (token) {
-    var user = this;
-    var decoded;
-    try {
-        decoded = jwt.verify(token, 'ashok123');
-    } catch (e) {
 
-    }
-    return user.findOne({
-        _id: decoded._id,
-        'tokens.token': token,
-        'tokens.access': 'auth'
-    });
-};
 //This method is Used to get Particular data as a properties Value
 UserSchema.methods.toJSON = function () {
     var user = this;
@@ -129,6 +116,30 @@ UserSchema.methods.generateAuthToken = function () {
     });
     return user.save().then(() => {
         return token;
+    });
+};
+UserSchema.statics.findByToken = function (token) {
+    var user = this;
+    var decoded;
+    try {
+        decoded = jwt.verify(token, 'ashok123');
+    } catch (e) {
+
+    }
+    return user.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens-access': 'auth'
+    });
+};
+UserSchema.methods.removeToken = function (token) {
+    var user = this;
+    return user.update({
+        $pull: {
+            tokens: {
+                token
+            }
+        }
     });
 };
 UserSchema.pre('save', function (next) {

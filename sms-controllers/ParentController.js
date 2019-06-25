@@ -71,6 +71,26 @@ router.post("/parent/login", (req, res) => {
 });
 //Login Api With Respect to Existing Tokens Section Ends
 
+
+//Creating Login API which is used to generate token at the time of login Section Starts
+router.use(formidable())
+router.post("/parent/login/with/token", (req, res) => {
+    var body = _.pick(req.fields, "userName", "password");
+    ParentInfo.findByCredentials(body.userName, body.password).then((user) => {
+        return user.generateAuthToken().then((token) => {
+            res.header('x-auth', token).send(user);
+        }).catch((err) => {
+            res.status(404).send();
+        });
+    });
+});
+//Creating Login API which is used to generate token at the time of login Section Ends
+
+//Logout parent from credential and remove Token Section Starts
+
+
+//Logout parent from credential and remove Token Section Ends
+
 //Get All Parent List Form Mongodb Database Section Starts
 router.get("/get/parent/list/all", (req, res) => {
     console.log(req.fields);
