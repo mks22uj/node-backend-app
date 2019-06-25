@@ -1,5 +1,6 @@
 var mongoose = require("../db/mongoose");
 var express = require("express");
+const _ = require("lodash");
 const bcryptjs = require('bcryptjs');
 const {
     SHA256
@@ -56,6 +57,21 @@ router.get('/get/info/byToken', (req, res) => {
         res.send(doc);
     });
 });
+//Login Api With Respect to Existing Tokens Section Starts 
+router.use(formidable());
+router.post("/parent/login", (req, res) => {
+    //console.log("req.body  " + req.fields);
+    var body = _.pick(req.fields, ["userName", "password"]);
+    console.log(body.userName + "    " + body.password);
+    ParentInfo.findByCredentials(body.userName, body.password).then((user) => {
+        res.send(user);
+    }).catch((err) => {
+        res.status(404).send();
+    });
+});
+//Login Api With Respect to Existing Tokens Section Ends
+
+//Get All Parent List Form Mongodb Database Section Starts
 router.get("/get/parent/list/all", (req, res) => {
     console.log(req.fields);
     ParentInfo.find().then((doc) => {
@@ -67,6 +83,9 @@ router.get("/get/parent/list/all", (req, res) => {
         res.status(404).send();
     });
 });
+//Get All Parent List Form Mongodb Database Section Starts
+
+//Get Single Parent Information According To Parent_Id Section Starts
 router.get("/get/parent/info/:id", (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
@@ -81,6 +100,9 @@ router.get("/get/parent/info/:id", (req, res) => {
         res.status(404).send();
     });
 });
+//Get Single Parent Information According To Parent_Id Section Ends
+
+//Update Parent Information According To Parent_Id Section Starts
 router.use(formidable());
 router.patch('/update/parent/info', (req, res) => {
     console.log(req.fields);
@@ -98,6 +120,8 @@ router.patch('/update/parent/info', (req, res) => {
         res.status(404).send();
     });
 });
+
+//Update Parent Information According To Parent_Id Section End
 router.delete('/delete/parent/info/:id', (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
