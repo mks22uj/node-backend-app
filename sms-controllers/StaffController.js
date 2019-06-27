@@ -51,10 +51,21 @@ router.post('/addStaff', (req, res) => {
     //     adhar: req.body.cast,
     //     classSectionInfo: req.body.classSectionInfo
     // });
-    staffData.save().then((doc) => {
-        res.send(doc);
+    staffData.save().then((staffData) => {
+        return staffData.generateAuthToken();
+    }).then((token) => {
+        res.header('x-auth', token).send(staffData);
     }).catch((err) => {
         res.status(404).send();
+    });
+});
+router.get('/find/info/By/Token', (req, res) => {
+    var token = req.header('x-auth');
+    StaffInfo.findByToken(token).then((doc) => {
+        if (!doc) {
+            return res.status(404).send("Token Not Found");
+        }
+        res.send(doc);
     });
 });
 router.get('/getAllStaff', (req, res) => {
@@ -138,6 +149,16 @@ router.delete('/deleteStaff', (req, res) => {
             return res.status(404).send();
         }
         res.send(doc);
+    }).catch((err) => {
+        res.status(404).send();
+    });
+});
+router.use(formidable());
+router.post("/staff/login", (req, res) => {
+    var body = _.pick(req.fields, ["userName", "passKey"]);
+    console.log(body.userName + "  " + body.passKey);
+    StaffInfo.findByCredentials(body.userName, body.passKey).then((user) => {
+        res.send(user);
     }).catch((err) => {
         res.status(404).send();
     });

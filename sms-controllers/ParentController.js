@@ -38,18 +38,6 @@ router.post("/parent/api/register", (req, res) => {
 });
 router.get('/get/info/byToken', (req, res) => {
     var token = req.header('x-auth');
-    //console.log("Token Value=====      " + token);
-    var original_Password = "ashok22uj";
-    bcryptjs.genSalt(10, (err, salt) => {
-        bcryptjs.hash(original_Password, salt, (err, hash) => {
-            console.log(hash);
-        });
-    });
-    var hashedValue = "$2a$10$O8I6f0NkxEWgp8dVV11HHuAjjoOE4Fapcd8iR9U2jnEMV4Xt0Jw2e1";
-    bcryptjs.compare(original_Password, hashedValue, (req, res) => {
-        console.log("Hash Response =" + res);
-    });
-
     ParentInfo.findByToken(token).then((doc) => {
         if (!doc) {
             return res.status(404).send();

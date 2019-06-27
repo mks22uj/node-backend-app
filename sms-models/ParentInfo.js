@@ -75,7 +75,7 @@ var UserSchema = mongoose.Schema({
         },
         access: {
             type: String,
-            require
+            require: true
         }
     }]
 });
@@ -129,7 +129,7 @@ UserSchema.statics.findByToken = function (token) {
     return user.findOne({
         '_id': decoded._id,
         'tokens.token': token,
-        'tokens-access': 'auth'
+        'tokens.access': 'auth'
     });
 };
 UserSchema.methods.removeToken = function (token) {

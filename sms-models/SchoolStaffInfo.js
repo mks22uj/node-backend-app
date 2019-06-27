@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-var StaffInfo = mongoose.model('staff_Main', {
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+var UserSchema = mongoose.Schema({
 
     staffFirstName: {
         type: String,
@@ -130,8 +132,82 @@ var StaffInfo = mongoose.model('staff_Main', {
     classSectionInfo: {
         type: String,
         default: null
+    },
+    tokens: [{
+        token: {
+            type: String,
+            require: true
+        },
+        access: {
+            type: String,
+            require: true
+        }
+    }]
+});
+UserSchema.methods.generateAuthToken = function () {
+    var user = this;
+    var access = 'auth';
+    var token = jwt.sign({
+        _id: user._id.toHexString(),
+        access
+    }, 'ashok123').toString();
+    user.tokens.push({
+        access,
+        token
+    });
+    return user.save().then(() => {
+        return token;
+    });
+};
+UserSchema.statics.findByToken = function (token) {
+    var user = this;
+    var decoded;
+    try {
+        decoded = jwt.verify(token, 'ashok123');
+    } catch (e) {
+
+    }
+    return user.findOne({
+        '_id': decoded._id,
+        'tokens.token': token,
+        'tokens.access': 'auth'
+    });
+};
+UserSchema.pre('save', function (next) {
+    var user = this;
+    if (user.isModified('passKey')) {
+        bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(user.passKey, salt, (err, hash) => {
+                user.passKey = hash;
+                next();
+            });
+        });
+    } else {
+        next();
     }
 });
+UserSchema.statics.findByCredentials = function (userName, passKey) {
+    var User = this;
+    return User.findOne({
+        userName
+    }).then((user) => {
+        if (!user) {
+            return Promise.reject();
+        }
+        return new Promise((resolve, reject) => {
+            bcrypt.compare(passKey, user.passKey, (err, res) => {
+                if (res) {
+                    resolve(user);
+                } else {
+                    reject();
+                }
+            });
+        });
+    });
+};
+
+var StaffInfo = mongoose.model('staff_Main', UserSchema);
+
 module.exports = {
     StaffInfo: StaffInfo
 }
