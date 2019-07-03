@@ -4,23 +4,6 @@ var express = require('express');
 const {
     SHA256
 } = require('crypto-js');
-
-//Encryption Section Starts 
-/*
-var bcrypt = require('bcryptjs');
-var password = "ashokjhf";
-bcrypt.genSalt(10, function (err, salt) {
-    bcrypt.hash(password, salt, (err, hash) => {
-        console.log("hashValue ==" + hash);
-
-    });
-});
-var hashedValue = "$2a$10$QgYuBG3WcRqz/IeoTjynJOF7eKlEulN71b9n/9UdyWjlrudZ4gMsS";
-bcrypt.compare(password, hashedValue, (err, res) => {
-    console.log("Response Code =" + res);
-});*/
-//Encryption Section Ends
-
 var app = express();
 app.use('/board-subject', require('./sms-controllers/BoardSubjectController'));
 app.use('/parent-service', require('./sms-controllers/ParentController'));
@@ -39,6 +22,7 @@ app.use("/topic-service", require('./sms-controllers/TopicController'));
 app.use("/notice-service", require('./sms-controllers/NoticeController'));
 app.use("/issue-service", require('./sms-controllers/SchoolIssueController'));
 app.use("/class-subject-map-service", require('./sms-controllers/ClassSubjectMappingController'));
+app.use("/weather-service", require("./sms-controllers/WeatherController"));
 app.listen(3001);
 console.log("Listening at http://localhost:3001");
 console.log("welcome");

@@ -173,6 +173,16 @@ UserSchema.statics.findByToken = function (token) {
         'tokens.access': 'auth'
     });
 };
+UserSchema.methods.removeToken = function (token) {
+    var user = this;
+    return user.update({
+        $pull: {
+            tokens: {
+                token
+            }
+        }
+    });
+};
 UserSchema.pre('save', function (next) {
     var user = this;
     if (user.isModified('passKey')) {

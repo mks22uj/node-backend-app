@@ -16,24 +16,23 @@ var {
 var router = express.Router();
 router.use(formidable());
 router.post("/parent/api/register", (req, res) => {
-    //console.log(req.fields);
     var parentData = new ParentInfo(req.fields);
-
-    //Store  Parent Information Without Storing Token Value
-    /*parentData.save().then((result) => {
-        if (!result) {
-            return res.status(404).send();
-        }
-        res.send(result);
-    }).catch((err) => {
-        res.status(404).send();
-    });*/
     parentData.save().then((parentData) => {
         return parentData.generateAuthToken();
     }).then((token) => {
-        res.header('x-auth', token).send(parentData);
+        res.header('x-auth', token).send({
+            "error": false,
+            "errorCode": null,
+            "Message": "Error is not Available",
+            "response": parentData
+        });
     }).catch((err) => {
-        return res.status(404).send();
+        return res.status(404).send({
+            "error": false,
+            "errorCode": "err28019",
+            "Message": "Invalid Fields",
+            "response": parentData
+        });
     });
 });
 router.get('/get/info/byToken', (req, res) => {
@@ -52,33 +51,44 @@ router.post("/parent/login", (req, res) => {
     var body = _.pick(req.fields, ["userName", "password"]);
     console.log(body.userName + "    " + body.password);
     ParentInfo.findByCredentials(body.userName, body.password).then((user) => {
-        res.send(user);
+        res.send({
+            "error": false,
+            "errorCode": null,
+            "Message": null,
+            "response": user
+        });
     }).catch((err) => {
-        res.status(404).send();
+        res.status(404).send({
+            "error": false,
+            "errorCode": "err3456",
+            "Message": "invalid username/password",
+            "response": null
+        });
     });
 });
 //Login Api With Respect to Existing Tokens Section Ends
-
-
 //Creating Login API which is used to generate token at the time of login Section Starts
 router.use(formidable())
 router.post("/parent/login/with/token", (req, res) => {
     var body = _.pick(req.fields, "userName", "password");
     ParentInfo.findByCredentials(body.userName, body.password).then((user) => {
         return user.generateAuthToken().then((token) => {
-            res.header('x-auth', token).send(user);
+            res.header('x-auth', token).send({
+                "error": false,
+                "errorCode": null,
+                "errorMessage": null,
+                "response": user
+            });
         }).catch((err) => {
-            res.status(404).send();
+            res.status(404).send({
+                "error": false,
+                "errorCode": "tokenerror2345",
+                "errorMessage": "Token Does not Exist"
+            });
         });
     });
 });
-//Creating Login API which is used to generate token at the time of login Section Ends
-
-//Logout parent from credential and remove Token Section Starts
-
-
-//Logout parent from credential and remove Token Section Ends
-
+//Creating Login API which is used to generate token at the time of login Section End
 //Get All Parent List Form Mongodb Database Section Starts
 router.get("/get/parent/list/all", (req, res) => {
     console.log(req.fields);
@@ -86,9 +96,18 @@ router.get("/get/parent/list/all", (req, res) => {
         if (!doc) {
             return res.status(404).send();
         }
-        res.send(doc);
+        res.send({
+            "error": false,
+            "errorCode": null,
+            "errorMessage": null,
+            "response": doc
+        });
     }).catch((err) => {
-        res.status(404).send();
+        res.status(404).send({
+            "error": true,
+            "errorCode": "error33ed",
+            "errorMessage": "invalid parent info url"
+        });
     });
 });
 //Get All Parent List Form Mongodb Database Section Starts
@@ -97,13 +116,26 @@ router.get("/get/parent/list/all", (req, res) => {
 router.get("/get/parent/info/:id", (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
-        return res.status(404).send();
+        return res.status(404).send({
+            "error": true,
+            "errorCode": "e32rror",
+            "errorMessage": "parent id does not exist"
+        });
     }
     ParentInfo.findById(id).then((doc) => {
         if (!doc) {
-            return res.status(404).send();
+            return res.status(404).send({
+                "error": true,
+                "errorCode": "e32rror",
+                "errorMessage": "unable to find info with id"
+            });
         }
-        res.send(doc);
+        res.send({
+            "error": false,
+            "errorCode": null,
+            "errorMessage": null,
+            "response": doc
+        });
     }).catch((err) => {
         res.status(404).send();
     });
@@ -121,11 +153,25 @@ router.patch('/update/parent/info', (req, res) => {
         new: true
     }).then((doc) => {
         if (!doc) {
-            return res.status(404).send();
+            return res.status(400).send({
+                "error": true,
+                "errorCode": "err2346or",
+                "errorMessage": "id does not exist"
+            });
         }
-        res.send(doc);
+        res.status(200).send({
+            "error": false,
+            "errorCode": null,
+            "errorMessage": null,
+            "response": parentData
+        });
     }).catch((err) => {
-        res.status(404).send();
+        res.status(405).send({
+            "error": true,
+            "errorCode": "err2345or",
+            "errorMessage": "Unable to update parent info",
+            "response": doc
+        });
     });
 });
 
@@ -133,15 +179,56 @@ router.patch('/update/parent/info', (req, res) => {
 router.delete('/delete/parent/info/:id', (req, res) => {
     var id = req.params.id;
     if (!ObjectID.isValid(id)) {
-        return res.status(404).send();
+        return res.status(404).send({
+            "error": true,
+            "errorCode": "errm15",
+            "errorMessage": "id does not exist"
+        });
     }
     ParentInfo.findOneAndDelete(id).then((doc) => {
         if (!doc) {
-            return res.status(404).send("remove");
+            return res.status(404).send({
+                "error": true,
+                "errorCode": "errm14",
+                "errorMessage": "Unable to delete records"
+            });
         }
-        res.send(doc);
+        res.send({
+            "error": false,
+            "errorCode": null,
+            "errorMessage": null,
+            "response": doc
+        });
     }).catch((err) => {
         return res.status(404).send();
+    });
+});
+var authenticate = (req, res, next) => {
+    var token = req.header('x-auth');
+    ParentInfo.findByToken(token).then((user) => {
+        if (!user) {
+            return Promise.reject();
+        }
+        req.user = user;
+        req.token = token;
+        next();
+    }).catch((err) => {
+        res.status(404).send();
+    });
+};
+router.delete("/parent/logout", authenticate, (req, res) => {
+    req.user.removeToken(req.token).then(() => {
+        res.status(200).send({
+            "error": false,
+            "errorCode": null,
+            "response": "successfully logout"
+        });
+    }, () => {
+        res.status(404).send({
+            "error": true,
+            "errorCode": "logour234",
+            "response": "token does not exist"
+        });
     });
 });
 module.exports = router;
